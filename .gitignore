@@ -1,0 +1,7 @@
+# raw dataset files (too large for GitHub)
+backend/data/raw/*.csv
+backend/data/raw/*.parquet
+
+# Python cache
+__pycache__/
+*.py[cod]
