@@ -1,0 +1,3 @@
+numpy
+matplotlib
+pyarrow # dataset file conversion only: parquet -> csv
