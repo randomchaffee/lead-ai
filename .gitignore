@@ -5,3 +5,7 @@ backend/data/raw/*.parquet
 # Python cache
 __pycache__/
 *.py[cod]
+
+# venv
+venv/
+.venv/
