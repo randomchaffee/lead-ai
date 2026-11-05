@@ -8,15 +8,15 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
 
-An unsupervised machine learning system designed to discover risk archetypes and operational anomalies in Philippine public infrastructure projects using clustering algorithms.
+An unsupervised machine learning system designed to discover risk archetypes and operational anomalies in Philippine public infrastructure projects using from-scratch clustering algorithms.
 
-**🌐 Project Webpage:** [https://randomchaffee.github.io/lead-ai/](https://randomchaffee.github.io/lead-ai/) *(To be changed once deployed)*
+**Project Webpage:** [https://randomchaffee.github.io/lead-ai/](https://randomchaffee.github.io/lead-ai/) *(To be changed to webpage URL once deployed)*
 
 </div>
 
 ---
 
-## 📖 Table of Contents
+## Table of Contents
 
 - [About the Project](#about-the-project)
 - [System Architecture](#system-architecture)
@@ -46,22 +46,22 @@ All preprocessing, model training, and evaluation metrics are implemented entire
 
 ```text
 [ BetterGov.ph Dataset ] 
-         │
-         ▼
-[ Step 1: load_and_sample.py ] ── Filter 2021-2023 & Active Contractors (1,600 rows)
-         │
-         ▼
-[ Step 2: feature_quantifying.py ] ── Compute 5 Metrics & Min-Max Normalization (1600x5 Matrix)
-         │
-         ├───► [ kmeans.py ]     ── Centroid-based partitioning (Lloyd's Algorithm)
-         ├───► [ kmedoids.py ]   ── Partitioning Around Medoids (PAM)
-         └───► [ dbscan.py ]     ── Density-based clustering & anomaly/noise detection (-1)
-         │
-         ▼
-[ Evaluation & Plotting ] ── Silhouette Score, Davies-Bouldin Index & Matplotlib Charts
-         │
-         ▼
-[ Static Webpage Deployment ] ── React + TypeScript Single-Page Application on GitHub Pages
+         |
+         v
+[ Step 1: load_and_sample.py ] ---- Filter 2021-2023 & Active Contractors (1,600 rows)
+         |
+         v
+[ Step 2: feature_quantifying.py ] - Compute 5 Metrics & Min-Max Normalization (1600x5 Matrix)
+         |
+         |---> [ kmeans.py ]     --- Centroid-based partitioning (Lloyd's Algorithm)
+         |---> [ kmedoids.py ]   --- Partitioning Around Medoids (PAM)
+         |---> [ dbscan.py ]     --- Density-based clustering & anomaly/noise detection (-1)
+         |
+         v
+[ Evaluation & Plotting ] --------- Silhouette Score, Davies-Bouldin Index & Matplotlib Charts
+         |
+         v
+[ Static Webpage Deployment ] ----- React + TypeScript Single-Page Application (if possible) on GitHub Pages
 ```
 
 ---
@@ -109,35 +109,34 @@ Three from-scratch unsupervised clustering methods are implemented and compared:
 
 ## Project Structure
 
+### Backend Engine (Python)
+
 ```text
-lead-ai/
-├── .github/
-│   └── workflows/
-│       └── deploy.yml            # Automated GitHub Pages build workflow
-├── docs/
-│   └── TASK-LOG.md               # Group member contribution and task tracking
-├── backend/
-│   ├── data/
-│   │   ├── raw/
-│   │   │   ├── convert_parquet.py # Parquet to CSV conversion script
-│   │   │   └── READ-FIRST.md      # Dataset download and setup guide
-│   │   └── processed/             # Directory for processed data artifacts
-│   ├── src/
-│   │   ├── load_and_sample.py     # Step 1: Data extraction and sampling
-│   │   └── feature_quantifying.py # Step 2: 5-feature calculation and normalization
-│   ├── outputs/                   # Exported charts and JSON evaluation outputs
-│   └── requirements.txt           # Minimal backend dependencies (numpy, matplotlib)
-├── frontend/
-│   ├── public/                    # Static assets and icons
-│   ├── src/
-│   │   ├── components/            # UI components and section layouts
-│   │   ├── types/                 # TypeScript interfaces for algorithm results
-│   │   ├── App.tsx                # Main single-page report view
-│   │   └── main.tsx               # Frontend entry point
-│   ├── package.json               # Node.js dependencies
-│   └── vite.config.ts             # Vite configuration with GitHub Pages base path
-├── .gitignore                     # Git ignore rules
-└── README.md                      # Primary project documentation
+backend/
+|-- data/
+|   |-- raw/
+|   |   |-- convert_parquet.py     # Parquet to CSV conversion script
+|   |   \-- READ-FIRST.md          # Dataset download and setup guide
+|   \-- processed/                 # Directory for processed data artifacts
+|-- src/
+|   |-- load_and_sample.py         # Data extraction and sampling
+|   \-- feature_quantifying.py     # 5-feature calculation and normalization
+|-- outputs/                       # Exported charts and JSON evaluation outputs
+\-- requirements.txt               # Backend dependencies (numpy, matplotlib, pyarrow)
+```
+
+### Frontend Application (React + TypeScript)
+
+```text
+frontend/
+|-- public/                        # Static assets and icons
+|-- src/
+|   |-- components/                # UI layout and report sections
+|   |-- types/                     # TypeScript interfaces for algorithm results
+|   |-- App.tsx                    # Main single-page report view
+|   \-- main.tsx                   # Frontend entry point
+|-- package.json                   # Node.js dependencies
+\-- vite.config.ts                 # Vite configuration with GitHub Pages base path
 ```
 
 ---
@@ -200,7 +199,7 @@ Open `http://localhost:5173/` in your browser.
 
 ## Task Log
 
-All member contributions across milestones are recorded in [docs/TASK-LOG.md](docs/TASK-LOG.md).
+All member contributions across milestones are tracked in [docs/TASK-LOG.md](docs/TASK-LOG.md).
 
 ---
 
@@ -208,4 +207,4 @@ All member contributions across milestones are recorded in [docs/TASK-LOG.md](do
 
 - **Dataset:** DPWH Infrastructure Transparency Dataset, [BetterGov.ph](https://data.bettergov.ph/)
 - **Course Reference:** CMSC 170 Introduction to Artificial Intelligence Laboratory Handouts (University of the Philippines Los Baños)
-- **AI Assistance Disclosure:** Generative AI tools were consulted for architecture guidance, syntax verification, and debugging. All data processing and algorithm implementations are written from scratch by the group using NumPy and Python standard libraries.
+- **AI Assistance Disclosure:** All data processing and algorithm implementations are written from scratch by the group using NumPy and Python standard libraries.
