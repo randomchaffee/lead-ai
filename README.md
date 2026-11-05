@@ -109,6 +109,8 @@ Three from-scratch unsupervised clustering methods are implemented and compared:
 
 ## Project Structure
 
+### Backend (Python)
+
 ### Backend Engine (Python)
 
 ```text
@@ -119,8 +121,12 @@ backend/
 |   |   \-- READ-FIRST.md          # Dataset download and setup guide
 |   \-- processed/                 # Directory for processed data artifacts
 |-- src/
-|   |-- load_and_sample.py         # Data extraction and sampling
-|   \-- feature_quantifying.py     # 5-feature calculation and normalization
+|   |-- load_and_sample.py         # Step 1: Data extraction and sampling
+|   |-- feature_quantifying.py     # Step 2: 5-feature calculation and normalization
+|   |-- kmeans.py                  # Step 3A: From-scratch K-Means clustering
+|   |-- kmedoids.py                # Step 3B: From-scratch K-Medoids (PAM) clustering
+|   |-- dbscan.py                  # Step 3C: From-scratch DBSCAN density clustering
+|   \-- evaluate.py                # Model evaluation (Silhouette & Davies-Bouldin)
 |-- outputs/                       # Exported charts and JSON evaluation outputs
 \-- requirements.txt               # Backend dependencies (numpy, matplotlib, pyarrow)
 ```

@@ -7,6 +7,7 @@
 | 2026-11-04 | Amiel De Castro | amiel/feat-backend-structure | Initial backend directory structure, data instructions, and requirements | Completed |
 | 2026-11-04 | Amiel De Castro | amiel/feat-data-sampling | Data loading, year and contractor filtering, and sampling (`load_and_sample.py`) | Completed |
 | 2026-11-05 | Amiel De Castro | amiel/feat-quantifying-data | 5-feature extraction and manual min-max normalization (`feature_quantifying.py`) | Completed |
+| 2026-11-05 | Amiel De Castro | amiel/feat-backend-scaffold | Algorithm draft files (`kmeans.py`, `kmedoids.py`, `dbscan.py`) and evaluation module (`evaluate.py`) | Completed |
 
 ## Frontend & Project Documentation
 
