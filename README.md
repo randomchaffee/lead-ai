@@ -2,12 +2,6 @@
 
 # LEAD-AI: DPWH Infrastructure Risk Profiling
 
-![Course](https://img.shields.io/badge/CMSC_170-Intro_to_Artificial_Intelligence-8A2BE2?style=for-the-badge)
-![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
-![React](https://img.shields.io/badge/React_19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
-
 An unsupervised machine learning system designed to discover risk archetypes and operational anomalies in Philippine public infrastructure projects using from-scratch clustering algorithms.
 
 **Project Webpage:** [https://randomchaffee.github.io/lead-ai/](https://randomchaffee.github.io/lead-ai/) *(To be changed to webpage URL once deployed)*
@@ -109,6 +103,8 @@ Three from-scratch unsupervised clustering methods are implemented and compared:
 
 ## Project Structure
 
+### Backend (Python)
+
 ### Backend Engine (Python)
 
 ```text
@@ -119,8 +115,12 @@ backend/
 |   |   \-- READ-FIRST.md          # Dataset download and setup guide
 |   \-- processed/                 # Directory for processed data artifacts
 |-- src/
-|   |-- load_and_sample.py         # Data extraction and sampling
-|   \-- feature_quantifying.py     # 5-feature calculation and normalization
+|   |-- load_and_sample.py         # Step 1: Data extraction and sampling
+|   |-- feature_quantifying.py     # Step 2: 5-feature calculation and normalization
+|   |-- kmeans.py                  # Step 3A: From-scratch K-Means clustering
+|   |-- kmedoids.py                # Step 3B: From-scratch K-Medoids (PAM) clustering
+|   |-- dbscan.py                  # Step 3C: From-scratch DBSCAN density clustering
+|   \-- evaluate.py                # Model evaluation (Silhouette & Davies-Bouldin)
 |-- outputs/                       # Exported charts and JSON evaluation outputs
 \-- requirements.txt               # Backend dependencies (numpy, matplotlib, pyarrow)
 ```
