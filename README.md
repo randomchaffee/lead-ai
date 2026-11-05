@@ -2,12 +2,6 @@
 
 # LEAD-AI: DPWH Infrastructure Risk Profiling
 
-![Course](https://img.shields.io/badge/CMSC_170-Intro_to_Artificial_Intelligence-8A2BE2?style=for-the-badge)
-![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
-![React](https://img.shields.io/badge/React_19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
-
 An unsupervised machine learning system designed to discover risk archetypes and operational anomalies in Philippine public infrastructure projects using from-scratch clustering algorithms.
 
 **Project Webpage:** [https://randomchaffee.github.io/lead-ai/](https://randomchaffee.github.io/lead-ai/) *(To be changed to webpage URL once deployed)*
