@@ -2,10 +2,13 @@
 backend/data/raw/*.csv
 backend/data/raw/*.parquet
 
-# Python cache
+# python cache
 __pycache__/
 *.py[cod]
 
-# venv
+# python virtual venv
 venv/
 .venv/
+
+# environment variables
+.env
