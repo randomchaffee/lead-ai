@@ -163,6 +163,13 @@ python -m venv venv
 python -m pip install -r backend/requirements.txt
 ```
 
+*(If you are a linux user)*:
+```bash
+python3 -m venv venv
+source venv/bin/activate 
+pip install -r backend/requirements.txt
+```
+
 ### 3. Prepare the Dataset
 
 Follow the download and conversion steps in [backend/data/raw/READ-FIRST.md](backend/data/raw/READ-FIRST.md).
