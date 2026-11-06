@@ -8,6 +8,7 @@
 | 2026-11-04 | Amiel De Castro | amiel/feat-data-sampling | Data loading, year and contractor filtering, and sampling (`load_and_sample.py`) | Completed |
 | 2026-11-05 | Amiel De Castro | amiel/feat-quantifying-data | 5-feature extraction and manual min-max normalization (`feature_quantifying.py`) | Completed |
 | 2026-11-05 | Amiel De Castro | amiel/feat-backend-scaffold | Algorithm draft files (`kmeans.py`, `kmedoids.py`, `dbscan.py`) and evaluation module (`evaluate.py`) | Completed |
+| 2026-11-06 | Evan Gregorio | evan/feat-dbscan | DBSCAN implementation using euclidean distance | Completed |
 
 ## Frontend & Project Documentation
 

@@ -12,17 +12,26 @@ An unsupervised machine learning system designed to discover risk archetypes and
 
 ## Table of Contents
 
-- [About the Project](#about-the-project)
-- [System Architecture](#system-architecture)
-- [Dataset & Preprocessing](#dataset--preprocessing)
-- [Engineered Feature Metrics](#engineered-feature-metrics)
-- [Machine Learning Methods](#machine-learning-methods)
-- [Project Structure](#project-structure)
-- [Installation & Setup](#installation--setup)
-- [Running the Pipeline](#running-the-pipeline)
-- [Running the Frontend](#running-the-frontend)
-- [Task Log](#task-log)
-- [References & Disclosures](#references--disclosures)
+- [LEAD-AI: DPWH Infrastructure Risk Profiling](#lead-ai-dpwh-infrastructure-risk-profiling)
+  - [Table of Contents](#table-of-contents)
+  - [About the Project](#about-the-project)
+  - [System Architecture](#system-architecture)
+  - [Dataset \& Preprocessing](#dataset--preprocessing)
+  - [Engineered Feature Metrics](#engineered-feature-metrics)
+  - [Machine Learning Methods](#machine-learning-methods)
+  - [Project Structure](#project-structure)
+    - [Backend (Python)](#backend-python)
+    - [Backend Engine (Python)](#backend-engine-python)
+    - [Frontend Application (React + TypeScript)](#frontend-application-react--typescript)
+  - [Installation \& Setup](#installation--setup)
+    - [Prerequisites](#prerequisites)
+    - [1. Clone the Repository](#1-clone-the-repository)
+    - [2. Configure Python Virtual Environment](#2-configure-python-virtual-environment)
+    - [3. Prepare the Dataset](#3-prepare-the-dataset)
+  - [Running the Pipeline](#running-the-pipeline)
+  - [Running the Frontend](#running-the-frontend)
+  - [Task Log](#task-log)
+  - [References \& Disclosures](#references--disclosures)
 
 ---
 
@@ -179,7 +188,17 @@ python backend/src/load_and_sample.py
 
 # 2. Run feature extraction and normalization
 python backend/src/feature_quantifying.py
+
+# 3. Run DBSCAN clustering
+python backend/src/dbscan.py
 ```
+
+The DBSCAN method uses Euclidean distance, `eps=0.15`, and `min_pts=5` by
+default. It prints the discovered cluster sizes and the number of noise
+points labeled `-1`. 
+To team: we should use the same Euclidean distance convention
+when implementing the other clustering methods so their results remain
+comparable.
 
 ---
 
