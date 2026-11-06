@@ -10,6 +10,7 @@
 | 2026-11-05 | Amiel De Castro | amiel/feat-backend-scaffold | Algorithm draft files (`kmeans.py`, `kmedoids.py`, `dbscan.py`) and evaluation module (`evaluate.py`) | Completed |
 | 2026-11-06 | Evan Gregorio | evan/feat-dbscan | DBSCAN implementation using euclidean distance | Completed |
 | 2026-11-06 | Denise Chua | chua/backend-feat-kmedoids | K-Medoids (PAM) implementation | Completed |
+| 2026-11-06 | Lardner Lanao | lardner/feat-backend-kmeans | K-Means Clustering implementation | Completed |
 
 ## Frontend & Project Documentation
 
