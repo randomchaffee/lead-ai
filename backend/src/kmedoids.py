@@ -11,11 +11,12 @@ np.random.seed(42)
 # [x] distance matrix 
 # [X] total cost
 # [X] BUILD 
-# [ ] SWAP 
-# [ ] convergence, pass limit
+# [X] SWAP 
+# [X] convergence, pass limit 
 # [ ] final cluster assignment
 # [ ] choosing K using silhouette
 # [ ] print output
+# [ ] use actual database
 
 """
 calculate the distance between two projects
@@ -134,6 +135,8 @@ def build(distances, k):
     first_medoid = -1
     
     for i in range(n):
+        
+        # add up all distances 
         cost = np.sum(D[i])
 
         if cost < best_cost:
@@ -192,10 +195,211 @@ def build(distances, k):
 
     return medoids    
 
+"""
+improve selected medoids (until convergence)
+"""
+def swap(distances, medoids, max_passes=100):
+    # TO CONSIDER: proper number of passes and tolerance
+
+    D = np.asarray(distances, dtype=float)
+
+    # check distance matrix
+    if D.ndim != 2 or D.shape[0] == 0 or D.shape[0] != D.shape[1]:
+        raise ValueError("Distance matrix must be nonempty and square.")
+    if not np.all(np.isfinite(D)) or np.any(D < 0):
+        raise ValueError("Distances must be finite and nonnegative.")
+    if not np.allclose(D, D.T) or not np.allclose(np.diag(D), 0):
+        raise ValueError("Distance matrix must be symmetric with zero diagonal.")
+
+    n = D.shape[0]
+
+    # check medoids 
+    if len(medoids) == 0:
+        raise ValueError("At least one medoid is required.")
+
+    for medoid in medoids:
+        if isinstance(medoid, (bool, np.bool_)) or not isinstance(medoid, (int, np.integer)):
+            raise ValueError("Medoid indices must be integers.")
+        if medoid < 0 or medoid >= n:
+            raise ValueError("Medoid index is out of range.")
+
+    if len(set(medoids)) != len(medoids):
+        raise ValueError("Medoids must not contain duplicates")
+
+    # check stopping conditions
+    if isinstance(max_passes, (bool, np.bool_)) or not isinstance(max_passes, (int, np.integer)):
+        raise ValueError("max_passes must be an integer.")
+    if max_passes < 1:
+        raise ValueError("max_passes must be positive.")
+
+    if isinstance(tol, (bool, np.bool_)) or not isinstance(tol, (int, float, np.integer, np.floating)):
+        raise ValueError("tol must be a nonnegative finite number.")
+    if not np.isfinite(tol) or tol < 0:
+        raise ValueError("tol must be a nonnegative finite number.")
+
+    # copy the medoids to make sure original list will be unchanged
+    medoids = list(medoids)
+
+    current_cost = total_cost(D, medoids)
+    cost_history = [current_cost]
+
+    # DEBUG
+    print("\n=== SWAP ===")
+    print("Starting medoids:", medoids)
+    print("Starting cost:", current_cost)
+
+    # repeat until no improving swap found OR max number of passes met
+    for pass_number in range(1, max_passes + 1):
+
+        # find nearest and second-nearest medoid
+        nearest_medoids = []
+        nearest_distances = []
+        second_distances = []
+
+        for j in range(n):
+            nearest = float("inf")
+            second = float("inf")
+            nearest_medoid = -1
+
+            for medoid in medoids:
+                d = D[j][medoid]
+
+                if d < nearest:
+                    second = nearest
+                    nearest = d
+                    nearest_medoid = medoid
+
+                elif d < second:
+                    second = d 
+            
+            nearest_medoids.append(nearest_medoid)
+            nearest_distances.append(nearest)
+            second_distances.append(second)
+
+        # find pair with smallest T_ih (change in cost when i, h swapped)
+        smallest_change = float("inf")
+        best_old_medoid = -1
+        best_new_medoid = -1
+
+        # i = current medoid
+        for old_medoid in medoids:
+        
+            # h =  non-medoid candidate project
+            for candidate in range(n):
+                if candidate in medoids:
+                    continue
+
+                total_change = 0
+
+                # calculate C_jih (contribution to cost) for every project j
+                for j in range(n):
+                    # Distance of j to its closest medoid
+                    Dj = nearest_distances[j]
+                    # Distance of j to its 2nd closest medoid
+                    Ej = second_distances[j]
+                    # distance of j to h (candidate medoid)
+                    distance_to_candidate = D[j][candidate]
+
+                    # Case A: project j belongs to medoid i
+                    if nearest_medoids[j] == old_medoid:
+
+                        # Case 2: candidate h is closer to j than its second-nearest medoid
+                        if distance_to_candidate < Ej:
+                            # C_jih = d(j,h) - d(j,i)
+                            contribution = distance_to_candidate - Dj
+
+                        # Case 3: distance of second-nearast medoid to j is closer than or equal to candidate h's
+                        else: 
+                            # C_jih = Ej - Dj
+                            contribution = Ej - Dj
+
+                    # Case b: project j belongs to another medoid
+                    else:
+
+                        # Case 1: j stays with current nearest medoid
+                        if distance_to_candidate >= Dj:
+                            # C_jih = 0
+                            contribution = 0
+
+                        # Case 4: h becomes closer to j than its current closest method
+                        else: 
+                            # Cjih = d(j,h) - Dj
+                            contribution = distance_to_candidate - Dj
+
+                    # T_ih = sum of C_jih over j
+                    total_change += contribution
+
+                if not np.isfinite(total_change):
+                    raise ValueError("ERROR: Swap cost change must be finite.")
+
+                # keep pair with smallest T_ih
+                if total_change < smallest_change:
+                    smallest_change = total_change
+                    best_old_medoid = old_medoid
+                    best_new_medoid = candidate
+
+        # Decide whether to carry out swap or stop
+
+        # no possible swap
+        if best_old_medoid == -1:
+            #DEBUG
+            print("No possible swap found")
+            print("SWAP stopped")
+            break
+
+        # stop if smallest T_ih is positive or zero
+        if smallest_change >= 0:
+            # DEBUG
+            print("\nPass:", pass_number)
+            print("Smallest T_ih:", smallest_change)
+            print("No swap can decrease the total cost.")
+            print("SWAP converged.")
+            break
+
+        # smallest T_ih is negative, perform swap
+        position = medoids.index(best_old_medoid)
+
+        new_medoids = medoids.copy()
+        new_medoids[position] = best_new_medoid
+
+        # recalculate the cost to verify the swap
+        new_cost = total_cost(D, new_medoids)
+        actual_change = new_cost - current_cost
+
+        # check if the calculated T_ih matches the actual cost change
+        if not np.isfinite(new_cost) or not np.isclose(actual_change, smallest_change, rtol=1e-9, atol=tol):
+            raise ValueError("ERROR: Swap cost change does not match actual cost.")
+
+        # the new cost must be SMALLER than the prev cost
+        if actual_change >= 0:
+            raise ValueError("ERROR: Swap did not decrease the total cost.")
+
+        # update the medoids and cost history
+        medoids = new_medoids
+        cost_history.append(new_cost)
+
+        # DEBUG
+        print("\nPass:", pass_number)
+        print("Smallest T_ih:", smallest_change)
+        print("Replaced medoid:", best_old_medoid)
+        print("New medoid:", best_new_medoid)
+        print("Previous cost:", current_cost)
+        print("New cost:", new_cost)
+
+        current_cost = new_cost
+
+        # go back to SWAP part on the next iteration
+
+    else:
+        # when max_passes is reached without breaking
+        print("\nMaximum number of passes reached.")
+
+    return medoids, cost_history        
+
+
 # wala pa
 def main():
     pass
 
 if __name__ == "__main__":
     main()
-  
