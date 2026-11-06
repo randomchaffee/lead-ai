@@ -4,9 +4,6 @@ from feature_quantifying import prepare_dataset
 # set random seed for reproducibility
 np.random.seed(42)
 
-# load preprocessed dataset
-# X, rows = prepare_dataset() # X is 1600 by 5 normalized numpy matrix, rows is list of raw dicts
-
 # TODO: remaining PAM implementation 
 # [x] distance matrix 
 # [X] total cost
@@ -239,9 +236,9 @@ def swap(distances, medoids, max_passes=100):
     cost_history = [current_cost]
 
     # DEBUG
-    print("\n[SWAP]")
-    print("Starting medoids:", medoids)
-    print("Starting cost:", current_cost)
+    # print("\n[SWAP]")
+    # print("Starting medoids:", medoids)
+    # print("Starting cost:", current_cost)
 
     # repeat until no improving swap found OR max number of passes met
     for pass_number in range(1, max_passes + 1):
@@ -338,17 +335,17 @@ def swap(distances, medoids, max_passes=100):
         # no possible swap
         if best_old_medoid == -1:
             #DEBUG
-            print("No possible swap found")
-            print("SWAP stopped")
+            # print("No possible swap found")
+            # print("SWAP stopped")
             break
 
         # stop if smallest T_ih is positive or zero
         if smallest_change >= 0:
             # DEBUG
-            print("\nPass:", pass_number)
-            print("Smallest T_ih:", smallest_change)
-            print("No swap can decrease the total cost.")
-            print("SWAP converged.")
+            # print("\nPass:", pass_number)
+            # print("Smallest T_ih:", smallest_change)
+            # print("No swap can decrease the total cost.")
+            # print("SWAP converged.")
             break
 
         # smallest T_ih is negative, perform swap
@@ -369,12 +366,12 @@ def swap(distances, medoids, max_passes=100):
         cost_history.append(new_cost)
 
         # DEBUG
-        print("\nPass:", pass_number)
-        print("Smallest T_ih:", smallest_change)
-        print("Replaced medoid:", best_old_medoid)
-        print("New medoid:", best_new_medoid)
-        print("Previous cost:", current_cost)
-        print("New cost:", new_cost)
+        # print("\nPass:", pass_number)
+        # print("Smallest T_ih:", smallest_change)
+        # print("Replaced medoid:", best_old_medoid)
+        # print("New medoid:", best_new_medoid)
+        # print("Previous cost:", current_cost)
+        # print("New cost:", new_cost)
 
         current_cost = new_cost
 
@@ -543,74 +540,9 @@ def run_pam(distances, k):
 
     return final_medoids, labels, cost, cost_history
 
-"""
-Find the best k using average silhouette width
-"""  
-def choose_k(distances, k_values):
-    D = np.asarray(distances, dtype=float)
-
-    # check distance matrix 
-    if D.ndim != 2  or D.shape[0] < 3 or D.shape[0] != D.shape[1]:
-        raise ValueError("Choosing k requires atleast 3 projects.")
-    if not np.all(np.isfinite(D)) or np.any(D < 0):
-        raise ValueError("Distances must be finite and nonnegative.")
-    if not np.allclose(D, D.T) or not np.allclose(np.diag(D), 0):
-        raise ValueError("Distance matrix must be symmetric with zero diagonal.")
-
-    k_values = list(k_values)
-
-    if len(k_values) == 0:
-        raise ValueError("At least one k value is required.")
-
-    # k must be at least 2 since silhouette is undefined for k=1
-    # exclude k=n since all projects would be in their own clusters
-    for k in k_values:
-        # check if k is an integer
-        if isinstance(k, (bool, np.bool_)) or not isinstance(k, (int, np.integer)):
-            raise ValueError("k must be an integer.")
-
-        # check if k is within the valid range
-        if k < 2 or k >= len(D):
-            raise ValueError("Each k must be between 2 and n-1.")
-
-    # make sure k values are not repeated
-    # each cluster count should be evaluated only once    
-    if len(set(k_values)) != len(k_values):
-        raise ValueError("k values must not contain duplicates.")
-
-    # initialize best result dict as output
-    best_result = None    
-
-    print("\n=== SILHOUETTE COMPARISON ===")
-
-    # run PAM separately for each k
-    for k in k_values:
-        medoids, labels, cost, history = run_pam(D, k)
-
-        score = silhouette_score(D, labels)
-
-        print(f"k={k} | silhouette={score:.6f} | "
-              f"cost={cost:.6f} | medoids={medoids}")
-
-        # select k with largest average silhouette width
-        if best_result is None or score > best_result["score"]:
-            best_result = {
-                "k": int(k),
-                "score": score,
-                "medoids": medoids,
-                "labels": labels,
-                "cost": cost,
-                "cost_history": history
-            }
-
-    print("Best k:", best_result["k"])
-
-    return best_result
-
-# wala pa
 def main():
     pass
 
-
 if __name__ == "__main__":
     main()
+
