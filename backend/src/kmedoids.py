@@ -4,17 +4,6 @@ from feature_quantifying import prepare_dataset
 # set random seed for reproducibility
 np.random.seed(42)
 
-# TODO: remaining PAM implementation 
-# [x] distance matrix 
-# [X] total cost
-# [X] BUILD 
-# [X] SWAP 
-# [X] convergence, pass limit 
-# [x] final cluster assignment
-# [x] choosing K using silhouette
-# [ ] print output
-# [ ] use actual database
-
 """
 calculate the distance between two projects
 """
@@ -540,8 +529,89 @@ def run_pam(distances, k):
 
     return final_medoids, labels, cost, cost_history
 
+# labels for the five features from feature_quantifying.py
+FEATURE_NAMES = [
+    "budget",
+    "duration_days",
+    "contractor_count",
+    "contractor_avg_budget",
+    "contractor_delay_rate"
+]
+
+"""
+Print information about each cluster
+"""
+def print_cluster_summary(X, rows, medoids, labels):
+    print("\n=== CLUSTER SUMMARIES ===")
+
+    for cluster_label, medoid_index in enumerate(medoids):
+
+        # get projects belonging to this cluster
+        members = np.where(labels == cluster_label)[0]
+
+        # get original information about the medoid project
+        medoid_row = rows[medoid_index]
+
+        # calculate average normalized features
+        means = np.mean(X[members], axis=0)
+
+        print(f"\nCluster {cluster_label}")
+        print("Number of projects:", len(members))
+        print("Medoid project index:", medoid_index)
+        print("Contract ID:", medoid_row.get("contractId", "N/A"))
+        print("Contractor:", medoid_row.get("contractor", "N/A"))
+        print("Budget:", medoid_row.get("budget", "N/A"))
+        print("Status:", medoid_row.get("status", "N/A"))
+
+        print("Average normalized features:")
+
+        for name, value in zip(FEATURE_NAMES, means):
+            print(f"  {name}: {value:.4f}")
+
+
 def main():
-    pass
+    # load actual project data using the existing preprocessing code
+    X, rows = prepare_dataset()
+    X = np.asarray(X, dtype=float)
+
+    # check project data
+    if X.ndim != 2 or X.shape[1] != len(FEATURE_NAMES):
+        raise ValueError("Expected five project features.")
+    if len(X) != len(rows):
+        raise ValueError("Each feature row must match one project record.")
+    if len(X) < 3:
+        raise ValueError("At least 3 projects are required.")
+
+    print("\n=== K-MEDOIDS (PAM): DPWH PROJECTS ===")
+    print("Projects loaded:", len(rows))
+    print("Features per project:", X.shape[1])
+
+
+    # ask user for the number of clusters
+    k = int(input("Enter number of clusters (k): "))
+
+    # check if k is valid for silhouette calculation
+    if k < 2 or k >= len(X):
+        raise ValueError("k must be between 2 and n-1.")
+
+    # calculate distances using normalized features
+    D = distance_matrix(X)
+
+    # run PAM using the chosen k
+    medoids, labels, cost, history = run_pam(D, k)
+
+    # calculate silhouette score for the resulting clusters
+    score = silhouette_score(D, labels)
+
+    print("\n=== FINAL K-MEDOID RESULT ===")
+    print("Number of clusters (k):", k)
+    print("Average silhouette:", score)
+    print("Final medoids:", medoids)
+    print("Final total cost:", cost)
+    print("Cost history:", history)
+
+    # print information about each final cluster
+    print_cluster_summary(X, rows, medoids, labels)
 
 if __name__ == "__main__":
     main()
