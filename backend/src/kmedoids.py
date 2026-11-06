@@ -13,8 +13,8 @@ np.random.seed(42)
 # [X] BUILD 
 # [X] SWAP 
 # [X] convergence, pass limit 
-# [ ] final cluster assignment
-# [ ] choosing K using silhouette
+# [x] final cluster assignment
+# [x] choosing K using silhouette
 # [ ] print output
 # [ ] use actual database
 
@@ -232,11 +232,6 @@ def swap(distances, medoids, max_passes=100):
     if max_passes < 1:
         raise ValueError("max_passes must be positive.")
 
-    if isinstance(tol, (bool, np.bool_)) or not isinstance(tol, (int, float, np.integer, np.floating)):
-        raise ValueError("tol must be a nonnegative finite number.")
-    if not np.isfinite(tol) or tol < 0:
-        raise ValueError("tol must be a nonnegative finite number.")
-
     # copy the medoids to make sure original list will be unchanged
     medoids = list(medoids)
 
@@ -244,7 +239,7 @@ def swap(distances, medoids, max_passes=100):
     cost_history = [current_cost]
 
     # DEBUG
-    print("\n=== SWAP ===")
+    print("\n[SWAP]")
     print("Starting medoids:", medoids)
     print("Starting cost:", current_cost)
 
@@ -362,17 +357,12 @@ def swap(distances, medoids, max_passes=100):
         new_medoids = medoids.copy()
         new_medoids[position] = best_new_medoid
 
-        # recalculate the cost to verify the swap
+        # calculate the cost after swapping to verify
         new_cost = total_cost(D, new_medoids)
-        actual_change = new_cost - current_cost
 
-        # check if the calculated T_ih matches the actual cost change
-        if not np.isfinite(new_cost) or not np.isclose(actual_change, smallest_change, rtol=1e-9, atol=tol):
-            raise ValueError("ERROR: Swap cost change does not match actual cost.")
-
-        # the new cost must be SMALLER than the prev cost
-        if actual_change >= 0:
-            raise ValueError("ERROR: Swap did not decrease the total cost.")
+        # check that the swap actually decreased the cost
+        if new_cost >= current_cost:
+            raise ValueError("Swap did not decrease the total cost.")
 
         # update the medoids and cost history
         medoids = new_medoids
@@ -396,10 +386,231 @@ def swap(distances, medoids, max_passes=100):
 
     return medoids, cost_history        
 
+"""
+Assign every project to a cluster based on its nearest medoids
+"""
+def assign_clusters(distances, medoids):
+    D = np.asarray(distances, dtype=float)
+
+    # check the distance matrix
+    if D.ndim != 2 or D.shape[0] == 0 or D.shape[0] != D.shape[1]:
+        raise ValueError("Distance matrix must be nonempty or square.")
+    if not np.all(np.isfinite(D)) or np.any(D < 0):
+        raise ValueError("Distances must be finite and nonnegative")
+    if not np.allclose(D, D.T) or not np.allclose(np.diag(D), 0):
+        raise ValueError("Distance matrix must be symmetric with zero diagonal.")
+
+    n = D.shape[0]
+    medoids = list(medoids)
+
+    # check medoids
+    if len(medoids) == 0 or len(medoids) > n:
+        raise ValueError("Number of medoids must be between 1 and n")
+
+    for medoid in medoids:
+        if medoid < 0 or medoid >= n:
+            raise ValueError("Medoid index is out of range.")
+
+    if len(set(medoids)) != len(medoids):
+        raise ValueError("Medoids must not contain duplicates.")
+
+    # store each project's medoid label
+    labels = np.zeros(n, dtype=int)
+
+    for j in range(n):
+        closest_label = 0
+        closest_distance = D[j][medoids[0]]
+
+        # compare distances to each select medoid
+        for label in range(1, len(medoids)):
+            d = D[j][medoids[label]]
+            
+            # get least distance
+            if d < closest_distance:
+                closest_distance = d
+                closest_label = label
+
+        labels[j] = closest_label
+    
+    # make sure each medoid represents its own cluster
+    for label, medoid in enumerate(medoids):
+        labels[medoid] = label
+
+    return labels
+
+"""
+Calculate the average silhouette width
+"""
+def silhouette_score(distances, labels):
+    D = np.asarray(distances, dtype=float)
+    labels = np.asarray(labels)
+
+    # check distance matrix 
+    if D.ndim != 2 or D.shape[0] == 0 or D.shape[0] != D.shape[1]:
+        raise ValueError("Distance matrix must be nonempty and square")
+    if not np.all(np.isfinite(D)) or np.any(D < 0):
+        raise ValueError("Distances must be finite and nonnegative.")
+    if not np.allclose(D, D.T) or not np.allclose(np.diag(D), 0):
+        raise ValueError("Distance matrix must be symmetric with zero diagonal.")
+
+    # check cluster labels
+    if labels.ndim != 1 or len(labels) != len(D):
+        raise ValueError("There must be one label per project.")
+    if not np.issubdtype(labels.dtype, np.integer):
+        raise ValueError("Cluster labels must be integers.")
+
+    clusters = np.unique(labels)
+
+    # silhouette is undefined when there's only one cluster
+    if len(clusters) < 2:
+        raise ValueError("Silhouette is undefined for k=1.")
+
+    # initialize score array
+    scores = np.zeros(len(D), dtype=float)
+
+    # calculate silhouette for each project j
+    for j in range(len(D)):
+        
+        # find projects in the same cluster
+        same_cluster = np.where(labels == labels[j])[0]
+
+        # silhouette is 0 if j is alone in its cluster (singleton)
+        if len(same_cluster) == 1:
+            continue
+
+        # a(j) = average distance of j to other projects in its own cluster
+        own_distances = []
+
+        for other in same_cluster:
+            # exclude j itself
+            if other != j:
+                own_distances.append(D[j][other])
+
+        a = float(np.mean(own_distances))
+
+        # b(j) = smallest average distance of j to another cluster
+        b = float("inf")
+
+        # compare the average distances to all other clusters
+        for cluster in clusters:
+            if cluster == labels[j]:
+                continue  # skip j's own cluster
+
+            # get all projects belonging to this cluster
+            other_cluster = np.where(labels == cluster)[0]
+
+            distances_to_cluster = []
+
+            # calculate distances from j to projects in this cluster
+            for other in other_cluster:
+                distances_to_cluster.append(D[j][other])
+
+            average = float(np.mean(distances_to_cluster))
+
+            # keep the smallest average distance
+            if average < b:
+                b = average
+
+        # s(j) = (b(j) - a(j)) / max(a(j), b(j))
+        # if both are zero, leave the silhouette score at 0
+        if max(a, b) > 0:
+            scores[j] = (b - a) / max(a, b)                                     
+
+    # check silhouette scores
+    if not np.all(np.isfinite(scores)):
+        raise ValueError("Silhouette scores must be finite.")
+    if np.any(scores < -1 - 1e-10) or np.any(scores > 1 + 1e-10):
+        raise ValueError("Silhouette scores must be between -1 and 1.")
+
+    return float(np.mean(scores))
+
+"""
+run the entire algo (BUILD, SWAP, Final Cluster Assignments for a given k) 
+"""
+def run_pam(distances, k):
+
+    # choose starting medoids
+    initial_medoids = build(distances, k)
+
+    # improve medoids selection
+    final_medoids, cost_history = swap(distances, initial_medoids)
+
+    # assign projects to the final medoids
+    labels = assign_clusters(distances, final_medoids)
+
+    # calculate total cost
+    cost = total_cost(distances, final_medoids)
+
+    return final_medoids, labels, cost, cost_history
+
+"""
+Find the best k using average silhouette width
+"""  
+def choose_k(distances, k_values):
+    D = np.asarray(distances, dtype=float)
+
+    # check distance matrix 
+    if D.ndim != 2  or D.shape[0] < 3 or D.shape[0] != D.shape[1]:
+        raise ValueError("Choosing k requires atleast 3 projects.")
+    if not np.all(np.isfinite(D)) or np.any(D < 0):
+        raise ValueError("Distances must be finite and nonnegative.")
+    if not np.allclose(D, D.T) or not np.allclose(np.diag(D), 0):
+        raise ValueError("Distance matrix must be symmetric with zero diagonal.")
+
+    k_values = list(k_values)
+
+    if len(k_values) == 0:
+        raise ValueError("At least one k value is required.")
+
+    # k must be at least 2 since silhouette is undefined for k=1
+    # exclude k=n since all projects would be in their own clusters
+    for k in k_values:
+        # check if k is an integer
+        if isinstance(k, (bool, np.bool_)) or not isinstance(k, (int, np.integer)):
+            raise ValueError("k must be an integer.")
+
+        # check if k is within the valid range
+        if k < 2 or k >= len(D):
+            raise ValueError("Each k must be between 2 and n-1.")
+
+    # make sure k values are not repeated
+    # each cluster count should be evaluated only once    
+    if len(set(k_values)) != len(k_values):
+        raise ValueError("k values must not contain duplicates.")
+
+    # initialize best result dict as output
+    best_result = None    
+
+    print("\n=== SILHOUETTE COMPARISON ===")
+
+    # run PAM separately for each k
+    for k in k_values:
+        medoids, labels, cost, history = run_pam(D, k)
+
+        score = silhouette_score(D, labels)
+
+        print(f"k={k} | silhouette={score:.6f} | "
+              f"cost={cost:.6f} | medoids={medoids}")
+
+        # select k with largest average silhouette width
+        if best_result is None or score > best_result["score"]:
+            best_result = {
+                "k": int(k),
+                "score": score,
+                "medoids": medoids,
+                "labels": labels,
+                "cost": cost,
+                "cost_history": history
+            }
+
+    print("Best k:", best_result["k"])
+
+    return best_result
 
 # wala pa
 def main():
     pass
+
 
 if __name__ == "__main__":
     main()
