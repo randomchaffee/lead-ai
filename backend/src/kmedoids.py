@@ -223,6 +223,9 @@ def swap(distances, medoids, max_passes=100):
 
     current_cost = total_cost(D, medoids)
     cost_history = [current_cost]
+    
+    # save the initial medoids (BUILD)
+    medoid_history = [medoids.copy()]
 
     # DEBUG
     # print("\n[SWAP]")
@@ -354,6 +357,9 @@ def swap(distances, medoids, max_passes=100):
         medoids = new_medoids
         cost_history.append(new_cost)
 
+        # save medoids after successful SWAP
+        medoid_history.append(medoids.copy())
+
         # DEBUG
         # print("\nPass:", pass_number)
         # print("Smallest T_ih:", smallest_change)
@@ -370,7 +376,7 @@ def swap(distances, medoids, max_passes=100):
         # when max_passes is reached without breaking
         print("\nMaximum number of passes reached.")
 
-    return medoids, cost_history        
+    return medoids, cost_history, medoid_history        
 
 """
 Assign every project to a cluster based on its nearest medoids
@@ -519,7 +525,7 @@ def run_pam(distances, k):
     initial_medoids = build(distances, k)
 
     # improve medoids selection
-    final_medoids, cost_history = swap(distances, initial_medoids)
+    final_medoids, cost_history, medoid_history = swap(distances, initial_medoids)
 
     # assign projects to the final medoids
     labels = assign_clusters(distances, final_medoids)
@@ -527,7 +533,7 @@ def run_pam(distances, k):
     # calculate total cost
     cost = total_cost(distances, final_medoids)
 
-    return final_medoids, labels, cost, cost_history
+    return final_medoids, labels, cost, cost_history, medoid_history
 
 # labels for the five features from feature_quantifying.py
 FEATURE_NAMES = [
@@ -598,7 +604,7 @@ def main():
     D = distance_matrix(X)
 
     # run PAM using the chosen k
-    medoids, labels, cost, history = run_pam(D, k)
+    medoids, labels, cost, history, medoid_history = run_pam(D, k)
 
     # calculate silhouette score for the resulting clusters
     score = silhouette_score(D, labels)
