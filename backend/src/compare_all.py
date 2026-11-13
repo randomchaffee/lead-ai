@@ -38,18 +38,28 @@ def print_comparison_table(results):
 
 # master workflow executing and comparing algorithms
 def main():
-    print("starting comparison workflow")
-    data, rows = prepare_dataset() # load prepared project matrix
+    print("=" * 60)
+    print("LEAD-AI: MASTER COMPARISON WORKFLOW")
+    print("=" * 60)
+
+    # step 1 load dataset
+    print("\n[status] fetching and preparing preprocessed dataset...")
+    data, rows = prepare_dataset()
     data = np.asarray(data, dtype=float)
+    print("[status] dataset loaded successfully with", len(rows), "samples")
 
     comparison_results = []
     collected_labels = []
 
     # 1 evaluate kmeans
-    print("\n[1/3] executing kmeans...")
+    print("\n" + "-" * 50)
+    print("[status] [1/3] initializing k-means clustering (k=4)...")
+    print("[status] updating centroids and assigning points...")
     start_time = time.perf_counter()
     km_labels, km_centroids = kmeans(data, 4)
     km_runtime = time.perf_counter() - start_time
+
+    print("[status] k-means converged, calculating evaluation metrics...")
     km_sil = silhouette_score(data, km_labels)
     km_dbi = davies_bouldin_index(data, km_labels)
 
@@ -61,14 +71,22 @@ def main():
         "runtime_seconds": float(km_runtime)
     })
     collected_labels.append(km_labels)
+    print("[status] k-means finished in", round(km_runtime, 4), "seconds")
 
     # 2 evaluate kmedoids pam
-    print("\n[2/3] executing kmedoids pam...")
+    print("\n" + "-" * 50)
+    print("[status] [2/3] starting k-medoids pam (k=4)...")
+    print("[status] precomputing pairwise distance matrix (1600x1600)...")
     start_time = time.perf_counter()
     distances = distance_matrix(data)
+
+    print("[status] running pam build phase to select initial medoids...")
+    print("[status] executing swap phase until cost convergence (may take a few seconds)...")
     pam_result = run_pam(distances, 4)
     kmed_runtime = time.perf_counter() - start_time
     kmed_labels = np.asarray(pam_result[1], dtype=int)
+
+    print("[status] medoids stabilized, calculating evaluation metrics...")
     kmed_sil = silhouette_score(data, kmed_labels)
     kmed_dbi = davies_bouldin_index(data, kmed_labels)
 
@@ -80,13 +98,18 @@ def main():
         "runtime_seconds": float(kmed_runtime)
     })
     collected_labels.append(kmed_labels)
+    print("[status] k-medoids finished in", round(kmed_runtime, 4), "seconds")
 
     # 3 evaluate dbscan
-    print("\n[3/3] executing dbscan...")
+    print("\n" + "-" * 50)
+    print("[status] [3/3] starting dbscan density clustering (eps=0.15, min_pts=5)...")
+    print("[status] finding density reachable points and identifying noise...")
     start_time = time.perf_counter()
     db_labels = dbscan(data, eps=0.15, min_pts=5)
     db_runtime = time.perf_counter() - start_time
     db_clusters = len(np.unique(db_labels[db_labels != -1]))
+
+    print("[status] dbscan completed, calculating silhouette and davies bouldin...")
     db_sil = silhouette_score(data, db_labels, ignore_noise=True)
     db_dbi = davies_bouldin_index(data, db_labels, ignore_noise=True)
     db_noise_count = int(np.sum(db_labels == -1))
@@ -100,6 +123,7 @@ def main():
         "runtime_seconds": float(db_runtime)
     })
     collected_labels.append(db_labels)
+    print("[status] dbscan finished in", round(db_runtime, 4), "seconds")
 
     # display formatted terminal table
     print_comparison_table(comparison_results)
