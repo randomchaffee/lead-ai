@@ -1,5 +1,8 @@
+import os
+import json
 import time
 import numpy as np
+import matplotlib.pyplot as plt
 
 from kmeans import kmeans
 from kmedoids import run_pam
@@ -34,6 +37,82 @@ def print_comparison_table(results):
         print(f"{name:<15} | {k_val:<10} | {sil_str:<12} | {dbi_str:<15} | {time_str:<12}")
 
     print("=" * 80)
+
+
+# generate three panel visualization comparing all algorithms side by side
+def plot_comparison(data, all_labels):
+    print("\n[status] rendering three panel comparative visualization...")
+    colors = plt.get_cmap("tab10") # standard palette for distinct cluster colors
+    fig, axes = plt.subplots(1, 3, figsize=(18, 5))
+
+    plot_titles = [
+        "K-Means (K=4)",
+        "K-Medoids PAM (K=4)",
+        "DBSCAN (eps=0.15, min_pts=5)"
+    ]
+
+    # plot budget versus duration for each method
+    for idx in range(3):
+        ax = axes[idx]
+        labels = all_labels[idx]
+        title = plot_titles[idx]
+
+        unique_labels = np.unique(labels)
+
+        # scatter each discovered cluster with distinct color
+        for c in unique_labels:
+            mask = labels == c
+
+            # handle dbscan noise points specially
+            if c == -1:
+                ax.scatter(
+                    data[mask, 0],
+                    data[mask, 1],
+                    color="black",
+                    marker="x",
+                    s=25,
+                    alpha=0.7,
+                    label="Noise (-1)"
+                )
+            else:
+                ax.scatter(
+                    data[mask, 0],
+                    data[mask, 1],
+                    color=colors(int(c) % 10),
+                    marker="o",
+                    s=15,
+                    alpha=0.6,
+                    label="Cluster " + str(c)
+                )
+
+        ax.set_xlabel("Budget (normalized)")
+        ax.set_ylabel("Duration (normalized)")
+        ax.set_title(title)
+        ax.grid(alpha=0.3)
+        ax.legend(fontsize=8)
+
+    plt.tight_layout()
+
+    # save figure in backend outputs folder
+    output_dir = os.path.join("backend", "outputs")
+    os.makedirs(output_dir, exist_ok=True)
+    save_path = os.path.join(output_dir, "methods_comparison.png")
+
+    plt.savefig(save_path, dpi=300) # save high resolution plott
+    print("[status] saved comparison visualization to:", save_path)
+    plt.show()
+
+
+# export quantitative results to json file
+def export_results(results):
+    output_dir = os.path.join("backend", "outputs")
+    os.makedirs(output_dir, exist_ok=True)
+    json_path = os.path.join(output_dir, "comparison_results.json")
+
+    with open(json_path, "w", encoding="utf-8") as f:
+        json.dump(results, f, indent=4)
+
+    print("[status] saved quantitative results to:", json_path)
 
 
 # master workflow executing and comparing algorithms
@@ -125,8 +204,10 @@ def main():
     collected_labels.append(db_labels)
     print("[status] dbscan finished in", round(db_runtime, 4), "seconds")
 
-    # display formatted terminal table
+    # display table and save outputs
     print_comparison_table(comparison_results)
+    export_results(comparison_results)
+    plot_comparison(data, collected_labels)
 
 
 if __name__ == "__main__":
