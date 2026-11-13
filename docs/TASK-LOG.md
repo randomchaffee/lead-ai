@@ -12,6 +12,7 @@
 | 2026-11-06 | Denise Chua | chua/backend-feat-kmedoids | K-Medoids (PAM) implementation | Completed |
 | 2026-11-06 | Lardner Lanao | lardner/feat-backend-kmeans | K-Means Clustering implementation | Completed |
 | 2026-11-13 | Evan Gregorio | evan/davies-bouldin | creating a function that returns the davies-bouldin index | Completed |
+| 2026-11-13 | Amiel De Castro | amiel/feat-kmeans-evaluation | K-Means evaluation with Silhouette Score, Davies-Bouldin Index, and Matplotlib cluster plots (`kmeans_evaluate.py`) | Completed |
 
 ## Frontend & Project Documentation
 
