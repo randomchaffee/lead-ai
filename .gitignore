@@ -12,3 +12,7 @@ venv/
 
 # environment variables
 .env
+
+# generated output charts and files
+backend/outputs/
+!backend/outputs/.gitkeep
