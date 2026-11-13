@@ -67,4 +67,3 @@ def silhouette_score(data, labels, ignore_noise=False):
             scores.append((b - a) / max(a, b))
     
     return float(np.mean(scores))
-        
