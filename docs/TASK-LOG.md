@@ -11,6 +11,7 @@
 | 2026-11-06 | Evan Gregorio | evan/feat-dbscan | DBSCAN implementation using euclidean distance | Completed |
 | 2026-11-06 | Denise Chua | chua/backend-feat-kmedoids | K-Medoids (PAM) implementation | Completed |
 | 2026-11-06 | Lardner Lanao | lardner/feat-backend-kmeans | K-Means Clustering implementation | Completed |
+| 2026-11-13 | Evan Gregorio | evan/davies-bouldin | creating a function that returns the davies-bouldin index | Completed |
 
 ## Frontend & Project Documentation
 
