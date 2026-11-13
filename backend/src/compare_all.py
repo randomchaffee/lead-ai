@@ -2,7 +2,8 @@ import time
 import numpy as np
 
 from kmeans import kmeans
-from evaluate import silhouette_score, davies_bouldin_index
+from kmedoids import run_pam
+from evaluate import distance_matrix, silhouette_score, davies_bouldin_index
 from feature_quantifying import prepare_dataset
 
 # feature labels for reference
@@ -46,6 +47,31 @@ def main():
     print("  silhouette:", round(km_sil, 4))
     print("  davies bouldin:", round(km_dbi, 4))
     print("  runtime:", round(km_runtime, 4), "seconds")
+
+    # 2 evaluate kmedoids pam
+    print("\n[2/3] executing kmedoids pam...")
+    start_time = time.perf_counter()
+    distances = distance_matrix(data)
+    pam_result = run_pam(distances, 4)
+    kmed_runtime = time.perf_counter() - start_time
+    kmed_labels = np.asarray(pam_result[1], dtype=int)
+    kmed_sil = silhouette_score(data, kmed_labels)
+    kmed_dbi = davies_bouldin_index(data, kmed_labels)
+
+    comparison_results.append({
+        "algorithm": "K-Medoids",
+        "num_clusters": 4,
+        "silhouette_score": float(kmed_sil),
+        "davies_bouldin": float(kmed_dbi),
+        "runtime_seconds": float(kmed_runtime)
+    })
+    collected_labels.append(kmed_labels)
+
+    print("kmedoids completed:")
+    print("  clusters: 4")
+    print("  silhouette:", round(kmed_sil, 4))
+    print("  davies bouldin:", round(kmed_dbi, 4))
+    print("  runtime:", round(kmed_runtime, 4), "seconds")
 
 
 if __name__ == "__main__":
