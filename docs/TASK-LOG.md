@@ -13,7 +13,7 @@
 | 2026-11-06 | Lardner Lanao | lardner/feat-backend-kmeans | K-Means Clustering implementation | Completed |
 | 2026-11-13 | Evan Gregorio | evan/davies-bouldin | creating a function that returns the davies-bouldin index | Completed |
 | 2026-11-13 | Amiel De Castro | amiel/feat-kmeans-evaluation | K-Means evaluation with Silhouette Score, Davies-Bouldin Index, and Matplotlib cluster plots (`kmeans_evaluate.py`) | Completed |
-| 2026-11-13 | Amiel De Castro | amiel/feat-compare-all | Master comparison workflow running all 3 algorithms with Silhouette, Davies-Bouldin, and 3-panel comparative plot (`compare_all.py`) | Completed |
+| 2026-11-13 | Amiel De Castro | amiel/feat-compare-all | Main comparison file running all 3 algorithms with Silhouette, Davies-Bouldin, and 3-panel plot comparison (`compare_all.py`) | Completed |
 
 ## Frontend & Project Documentation
 
@@ -21,3 +21,4 @@
 | :--- | :--- | :--- | :--- | :--- |
 | 2026-10-29 | Amiel De Castro | main | Initial frontend project setup using Vite and React TypeScript | Completed |
 | 2026-11-05 | Amiel De Castro | amiel/docs-update | Reorganize docs to project root, update README with architecture and setup guide | Completed |
+| 2026-11-14 | Amiel De Castro | amiel/docs-update | Update README pipeline instructions, project structure, and parameter configuration | Completed |
