@@ -1,20 +1,9 @@
 import numpy as np
 from feature_quantifying import prepare_dataset
+from config import K, MAX_ITER, RANDOM_SEED, FEATURE_NAMES
 
 # set random seed for reproducibility
-np.random.seed(42)
-
-# number of clusters (same as the number of clusters DBSCAN found)
-K = 4
-
-# labels for the five features from feature_quantifying.py
-FEATURE_NAMES = [
-    "budget",
-    "duration_days",
-    "contractor_count",
-    "contractor_avg_budget",
-    "contractor_delay_rate"
-]
+np.random.seed(RANDOM_SEED)
 
 
 def distance_matrix(data):
@@ -54,7 +43,7 @@ def update_centroids(X, labels, centroids):
     return new_centroids
 
 
-def kmeans(X, k, max_iter=300):
+def kmeans(X, k, max_iter=MAX_ITER):
     # Run K-means and return (labels, centroids).
     X = np.asarray(X, dtype=float)
 

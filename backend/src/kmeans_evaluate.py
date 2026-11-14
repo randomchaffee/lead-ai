@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from kmeans import kmeans
 from evaluate import silhouette_score, davies_bouldin_index
 from feature_quantifying import prepare_dataset
+from config import K
 
 # list of feature labels for printing stast
 feature_names = [
@@ -107,7 +108,7 @@ def evaluate_kmeans():
     data, rows = prepare_dataset() # load normalized project matrix
     data = np.asarray(data, dtype=float)
 
-    k_clusters = 4 # four clusters chosen for fair comparison
+    k_clusters = K # four clusters chosen for fair comparison
 
     # track runtime for kmeans execution
     start_time = time.perf_counter()
