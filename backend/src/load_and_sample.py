@@ -1,12 +1,10 @@
 import csv
 import random
 
-#constants for easy changing
-NUM_OF_PROJS = 3 # for minimum project count of contractors
-SAMPLE_SIZE = 1600 # for sampling/getting sub dataset from the main dataset
+from config import RANDOM_SEED, SAMPLE_SIZE, NUM_OF_PROJS, VALID_YEARS
 
 # seed for random sampling to keep things consistent
-random.seed(42)
+random.seed(RANDOM_SEED)
 
 csv_path = "backend/data/raw/dpwh_transparency_data.csv" # relative path to raw datset
 
@@ -14,7 +12,7 @@ csv_path = "backend/data/raw/dpwh_transparency_data.csv" # relative path to raw 
 # function to read csv and filter years
 def filter_by_year(file_path):
     year_filtered_rows = [] # list to hold valid rows
-    valid_years = ["2021", "2022", "2023"]
+    valid_years = VALID_YEARS
     record_count = 0 # counter for number of records
 
     # open file with utf 8 encoding
