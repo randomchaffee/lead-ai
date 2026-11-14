@@ -15,10 +15,16 @@
 | 2026-11-13 | Amiel De Castro | amiel/feat-kmeans-evaluation | K-Means evaluation with Silhouette Score, Davies-Bouldin Index, and Matplotlib cluster plots (`kmeans_evaluate.py`) | Completed |
 | 2026-11-13 | Amiel De Castro | amiel/feat-compare-all | Main comparison file running all 3 algorithms with Silhouette, Davies-Bouldin, and 3-panel plot comparison (`compare_all.py`) | Completed |
 
-## Frontend & Project Documentation
+## Frontend
 
 | Date | Member | Branch | Task | Status |
 | :--- | :--- | :--- | :--- | :--- |
 | 2026-10-29 | Amiel De Castro | main | Initial frontend project setup using Vite and React TypeScript | Completed |
+
+## Project Documentation
+
+| Date | Member | Branch | Task | Status |
+| :--- | :--- | :--- | :--- | :--- |
 | 2026-11-05 | Amiel De Castro | amiel/docs-update | Reorganize docs to project root, update README with architecture and setup guide | Completed |
 | 2026-11-14 | Amiel De Castro | amiel/docs-update | Update README pipeline instructions, project structure, and parameter configuration | Completed |
+| 2026-11-14 | Amiel De Castro | amiel/feat-dynamic-constants | Centralize backend constants into config.py and make pipeline dynamic | Completed |
