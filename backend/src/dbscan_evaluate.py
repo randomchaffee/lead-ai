@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from dbscan import dbscan, summarize_clusters
 from evaluate import silhouette_score
 from feature_quantifying import prepare_dataset
+from config import EPS, MIN_PTS
 
 # scatterplot visualization (i used matplotlib)
 def plot_clusters(data, labels, eps, min_pts):
@@ -53,8 +54,8 @@ def main():
     data, rows = prepare_dataset()
     data = np.asarray(data, dtype=float)
     
-    eps = 0.15
-    min_pts = 5
+    eps = EPS
+    min_pts = MIN_PTS
     
     start_time = time.perf_counter()
     labels = dbscan(data, eps=eps, min_pts=min_pts)
