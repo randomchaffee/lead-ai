@@ -1,4 +1,3 @@
-
 import time
 import textwrap
 
@@ -8,6 +7,7 @@ import matplotlib.pyplot as plt
 from kmedoids import run_pam
 from evaluate import distance_matrix, silhouette_score
 from feature_quantifying import prepare_dataset
+from config import K
 
 
 # scatterplot visualization
@@ -156,8 +156,8 @@ def main():
     data, rows = prepare_dataset()
     data = np.asarray(data, dtype=float)
 
-    # NOTE: k = 4, for fair output comparison
-    k = 4
+    # use constant k from config for fair output comparison
+    k = K
 
     # run K-Medoids using all five normalized features
     start_time = time.perf_counter()

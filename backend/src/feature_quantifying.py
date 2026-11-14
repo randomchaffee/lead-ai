@@ -1,6 +1,7 @@
 import numpy as np
 from datetime import datetime
 from load_and_sample import load_and_sample
+from config import FEATURE_NAMES
 
 
 # function to calculate project duration in calendar days
@@ -135,7 +136,7 @@ def prepare_dataset():
     
     # display sample comparison for verification
     print("\nsample feature comparison for first project (raw vs normalized):")
-    feature_labels = ["budget", "duration_days", "contractor_count", "contractor_avg_budget", "contractor_delay_rate"]
+    feature_labels = FEATURE_NAMES
     for i in range(len(feature_labels)):
         name = feature_labels[i]
         raw_val = raw_matrix[0][i]

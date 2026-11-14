@@ -9,15 +9,7 @@ from kmedoids import run_pam
 from dbscan import dbscan
 from evaluate import distance_matrix, silhouette_score, davies_bouldin_index
 from feature_quantifying import prepare_dataset
-
-# feature labels for reference
-feature_names = [
-    "budget",
-    "duration_days",
-    "contractor_count",
-    "contractor_avg_budget",
-    "contractor_delay_rate"
-]
+from config import K, EPS, MIN_PTS, FEATURE_NAMES, SAMPLE_SIZE
 
 
 # format and print side by side comaprison table in terminal
@@ -46,9 +38,9 @@ def plot_comparison(data, all_labels):
     fig, axes = plt.subplots(1, 3, figsize=(18, 5))
 
     plot_titles = [
-        "K-Means (K=4)",
-        "K-Medoids PAM (K=4)",
-        "DBSCAN (eps=0.15, min_pts=5)"
+        f"K-Means (K={K})",
+        f"K-Medoids PAM (K={K})",
+        f"DBSCAN (eps={EPS}, min_pts={MIN_PTS})"
     ]
 
     # plot budget versus duration for each method
@@ -132,10 +124,10 @@ def main():
 
     # 1 evaluate kmeans
     print("\n" + "-" * 50)
-    print("[status] [1/3] initializing k-means clustering (k=4)...")
+    print(f"[status] [1/3] initializing k-means clustering (k={K})...")
     print("[status] updating centroids and assigning points...")
     start_time = time.perf_counter()
-    km_labels, km_centroids = kmeans(data, 4)
+    km_labels, km_centroids = kmeans(data, K)
     km_runtime = time.perf_counter() - start_time
 
     print("[status] k-means converged, calculating evaluation metrics...")
@@ -144,7 +136,7 @@ def main():
 
     comparison_results.append({
         "algorithm": "K-Means",
-        "num_clusters": 4,
+        "num_clusters": K,
         "silhouette_score": float(km_sil),
         "davies_bouldin": float(km_dbi),
         "runtime_seconds": float(km_runtime)
@@ -154,14 +146,14 @@ def main():
 
     # 2 evaluate kmedoids pam
     print("\n" + "-" * 50)
-    print("[status] [2/3] starting k-medoids pam (k=4)...")
-    print("[status] precomputing pairwise distance matrix (1600x1600)...")
+    print(f"[status] [2/3] starting k-medoids pam (k={K})...")
+    print(f"[status] precomputing pairwise distance matrix ({SAMPLE_SIZE}x{SAMPLE_SIZE})...")
     start_time = time.perf_counter()
     distances = distance_matrix(data)
 
     print("[status] running pam build phase to select initial medoids...")
     print("[status] executing swap phase until cost convergence (may take a few seconds)...")
-    pam_result = run_pam(distances, 4)
+    pam_result = run_pam(distances, K)
     kmed_runtime = time.perf_counter() - start_time
     kmed_labels = np.asarray(pam_result[1], dtype=int)
 
@@ -171,7 +163,7 @@ def main():
 
     comparison_results.append({
         "algorithm": "K-Medoids",
-        "num_clusters": 4,
+        "num_clusters": K,
         "silhouette_score": float(kmed_sil),
         "davies_bouldin": float(kmed_dbi),
         "runtime_seconds": float(kmed_runtime)
@@ -181,10 +173,10 @@ def main():
 
     # 3 evaluate dbscan
     print("\n" + "-" * 50)
-    print("[status] [3/3] starting dbscan density clustering (eps=0.15, min_pts=5)...")
+    print(f"[status] [3/3] starting dbscan density clustering (eps={EPS}, min_pts={MIN_PTS})...")
     print("[status] finding density reachable points and identifying noise...")
     start_time = time.perf_counter()
-    db_labels = dbscan(data, eps=0.15, min_pts=5)
+    db_labels = dbscan(data, eps=EPS, min_pts=MIN_PTS)
     db_runtime = time.perf_counter() - start_time
     db_clusters = len(np.unique(db_labels[db_labels != -1]))
 

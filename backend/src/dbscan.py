@@ -1,6 +1,7 @@
 import numpy as np
 
 from feature_quantifying import prepare_dataset
+from config import EPS, MIN_PTS
 
 
 UNVISITED = -2
@@ -105,8 +106,8 @@ def summarize_clusters(labels):
 def main():
     # run DBSCAN on the shared prepared dataset
     features, rows = prepare_dataset()
-    eps = 0.15
-    min_pts = 5
+    eps = EPS
+    min_pts = MIN_PTS
     labels = dbscan(features, eps=eps, min_pts=min_pts)
     
     # terminal

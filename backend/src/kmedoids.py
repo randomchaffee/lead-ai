@@ -1,8 +1,9 @@
 import numpy as np
 from feature_quantifying import prepare_dataset
+from config import K, RANDOM_SEED, FEATURE_NAMES
 
 # set random seed for reproducibility
-np.random.seed(42)
+np.random.seed(RANDOM_SEED)
 
 """
 calculate the distance between two projects
@@ -535,15 +536,6 @@ def run_pam(distances, k):
 
     return final_medoids, labels, cost, cost_history, medoid_history
 
-# labels for the five features from feature_quantifying.py
-FEATURE_NAMES = [
-    "budget",
-    "duration_days",
-    "contractor_count",
-    "contractor_avg_budget",
-    "contractor_delay_rate"
-]
-
 """
 Print information about each cluster
 """
@@ -593,8 +585,8 @@ def main():
     print("Features per project:", X.shape[1])
 
 
-    # ask user for the number of clusters
-    k = int(input("Enter number of clusters (k): "))
+    # use constant k from config for consistent comparison
+    k = K
 
     # check if k is valid for silhouette calculation
     if k < 2 or k >= len(X):
