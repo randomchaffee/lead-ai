@@ -130,21 +130,20 @@ function App() {
         <div className="hero-orb hero-orb-two" aria-hidden="true" />
         <div className="hero-inner">
           <div className="hero-copy">
-            <p className="eyebrow"><span /> CMSC 170 · Unsupervised Learning</p>
+            <p className="eyebrow"><span /> CMSC 170</p>
             <h1>Making sense of<br /><em>public works.</em></h1>
             <p className="hero-lede">
-              Discovering project patterns and potential anomalies in Philippine
+              Our project aims to discover project patterns and potential anomalies in Philippine
               infrastructure through three from-scratch clustering methods.
             </p>
             <div className="hero-actions">
-              <a className="button button-light" href="#results">Explore the results <span>↓</span></a>
-              <a className="button button-outline" href="#methods">How it works</a>
+              <a className="button button-light" href="#results">Results<span>↓</span></a>
+              <a className="button button-outline" href="#methods">Methods</a>
             </div>
-            <p className="hero-note">A student research project · UPLB</p>
+            <p className="hero-note">A student research project · UPLB </p>
           </div>
           <div className="hero-visual" aria-label="Project dataset overview">
             <div className="visual-topline">
-              <span className="live-dot" /> PROJECT SNAPSHOT
               <span className="visual-year">2021 — 2023</span>
             </div>
             <div className="visual-number">1,600</div>
@@ -168,29 +167,27 @@ function App() {
             <div className="visual-footer">
               <span><i className="legend-dot mint" /> Budget</span>
               <span><i className="legend-dot gold" /> Duration</span>
-              <span className="visual-caption">Illustrative</span>
+              <span className="visual-caption">*This is Illustrative</span>
             </div>
           </div>
         </div>
-        <a className="scroll-cue" href="#project" aria-label="Scroll to project overview">SCROLL TO EXPLORE <span>↓</span></a>
+        <a className="scroll-cue" href="#project" aria-label="Scroll to project overview">SCROLL TO EXPLORE<span>↓</span></a>
       </section>
 
       <section className="intro-section content-section" id="project">
         <div className="section-heading">
           <p className="section-kicker">THE PROJECT</p>
-          <h2>Patterns first.<br /><span>Questions next.</span></h2>
+          <h2>Looking For Patterns in DPWH Projects.<br /><span>Using AI Algorithms.</span></h2>
         </div>
         <div className="intro-copy">
           <p>
-            Public infrastructure projects are complex. LEAD-AI explores whether
+            Public infrastructure projects are complex. Our project, LEAD-AI, explores whether
             clustering can help organize DPWH contract records into groups with
             similar budgets, timelines, and contractor characteristics.
           </p>
           <p>
-            The goal is to surface patterns and unusual cases for closer review—not
-            to make accusations or replace a formal audit.
+            The goal is to seek out patterns and unusual cases for closer review.
           </p>
-          <div className="caution"><span>!</span> An anomaly is a prompt for investigation, not proof of wrongdoing.</div>
         </div>
       </section>
 
@@ -200,7 +197,7 @@ function App() {
             <p className="section-kicker">01 / THE DATA</p>
             <h2>From raw records<br />to useful signals.</h2>
             <p className="section-description">
-              DPWH Infrastructure Transparency Dataset ·{' '}
+              Our Source: DPWH Infrastructure Transparency Dataset ·{' '}
               <a
                 className="source-link"
                 href="https://data.bettergov.ph/"
@@ -228,7 +225,7 @@ function App() {
               <span>minimum track record</span>
             </div>
             <div className="fact-card">
-              <span className="fact-label">FINAL SAMPLE</span>
+              <span className="fact-label">SAMPLE</span>
               <strong>1,600</strong>
               <span>randomly selected · seed 42</span>
             </div>
@@ -237,7 +234,7 @@ function App() {
         <div className="features-wrap">
           <div className="feature-heading">
             <p className="section-kicker">FIVE FEATURES</p>
-            <p>Each project becomes a five-number profile.</p>
+            <p>We used five distinct features from each project .</p>
           </div>
           <div className="feature-list">
             {features.map((feature, index) => (
@@ -259,11 +256,10 @@ function App() {
         <div className="section-heading heading-inline">
           <div>
             <p className="section-kicker">02 / THREE APPROACHES</p>
-            <h2>Three ways to<br /><span>find a pattern.</span></h2>
+            <h2>Three methods to<br /><span>find a pattern.</span></h2>
           </div>
           <p className="section-description">
-            Same five features. Same normalized dataset. Different ideas of what
-            makes a meaningful group.
+            We used three different methods to evaluate our chosen dataset. 
           </p>
         </div>
         <div className="method-grid">
@@ -290,9 +286,8 @@ function App() {
           <div className="results-heading">
             <div>
               <p className="section-kicker">03 / WHAT WE FOUND</p>
-              <h2>Results at a glance.</h2>
+              <h2>Results Overview.</h2>
             </div>
-            <p>Same data in. Three different perspectives out.</p>
           </div>
           <div className="metric-highlights">
             <article className="metric-card">
@@ -305,7 +300,7 @@ function App() {
             </article>
             <article className="metric-card">
               <span className="metric-icon metric-icon-orange">⌁</span>
-              <div><span className="metric-label">DBSCAN NOISE POINTS</span><strong>47</strong><p>isolated in this run</p></div>
+              <div><span className="metric-label">DBSCAN NOISE POINTS</span><strong>47</strong></div>
             </article>
           </div>
           <div className="metric-explainer">
@@ -360,14 +355,13 @@ function App() {
 
       <section className="plot-section content-section">
         <div className="plot-heading">
-          <div><p className="section-kicker">VISUAL COMPARISON</p><h2>One view, three clusterings.</h2></div>
-          <span className="plot-badge">BUDGET × DURATION</span>
+          <div><h2>Visual Comparison Using Matplotlib</h2></div>
         </div>
         <figure className="plot-figure">
           <img src={comparisonImage} alt="Three scatter plots compare K-Means, K-Medoids, and DBSCAN cluster assignments by normalized budget and duration." />
           <figcaption>
             The algorithms used all five normalized features to cluster projects. This plot shows
-            only budget and duration for easier viewing; cluster colors and numbers do not match
+            only budget and duration for easier viewing, so the cluster colors and numbers do not match
             across methods.
           </figcaption>
         </figure>
@@ -376,11 +370,10 @@ function App() {
 
       <section className="takeaway-section">
         <div className="content-section takeaway-inner">
-          <div><p className="section-kicker">04 / TAKEAWAY</p><h2>No single winner.<br /><span>Different tools for<br />different questions.</span></h2></div>
+          <div><p className="section-kicker">04 / TAKEAWAY</p><h2>We found all our algorithms useful, each in different ways.<br /></h2></div>
           <div className="takeaway-copy">
             <p>K-Means separated groups best by Silhouette Score and ran fastest. DBSCAN scored best on Davies–Bouldin and uniquely surfaced isolated projects. K-Medoids offers real project examples as representatives.</p>
-            <p>The best choice depends on the goal: efficient fixed grouping, interpretable representatives, or density-based anomaly screening.</p>
-            <div className="disclaimer"><strong>Important:</strong> Clusters reveal patterns in this sample. They do not prove fraud, corruption, or contractor performance issues.</div>
+            <div className="disclaimer"><strong>A side note:</strong> Clusters reveal patterns in the sample that we used. On their own, they do not prove fraud, corruption, or contractor performance issues.</div>
           </div>
         </div>
       </section>
@@ -390,7 +383,7 @@ function App() {
         <div className="footer-copy">
           <p>DPWH Infrastructure Transparency Dataset · BetterGov.ph</p>
           <p>Built by De Castro, Gregorio, Lanao, and Chua · CMSC 170</p>
-          <p>Algorithms and metrics implemented from scratch with Python and NumPy. Matplotlib used for visualization. AI assistance disclosed; results reviewed by the group.</p>
+          <p>Algorithms and metrics were implemented with Python and NumPy. Matplotlib was used for visualization. AI assistance disclosed.</p>
         </div>
         <a className="footer-link" href="https://github.com/randomchaffee/lead-ai" target="_blank" rel="noreferrer">Repository <span>↗</span></a>
       </footer>

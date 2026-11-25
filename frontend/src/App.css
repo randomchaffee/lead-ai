@@ -42,7 +42,7 @@ main { width: 100%; overflow: hidden; }
 .hero-copy { max-width: 640px; }
 .eyebrow, .section-kicker { text-transform: uppercase; letter-spacing: .16em; font-weight: 700; font-size: .72rem; }
 .eyebrow { color: #b7d7c6; display: flex; gap: 10px; align-items: center; }
-.eyebrow span, .live-dot { height: 7px; width: 7px; border-radius: 50%; display: inline-block; background: #85d9b2; box-shadow: 0 0 0 4px rgba(133, 217, 178, .12); }
+/* .eyebrow span, .live-dot { height: 7px; width: 7px; border-radius: 50%; display: inline-block; background: #85d9b2; box-shadow: 0 0 0 4px rgba(133, 217, 178, .12); } */
 .hero h1 { font-family: 'Manrope', sans-serif; font-weight: 600; letter-spacing: -.065em; font-size: clamp(3.35rem, 6vw, 5.8rem); line-height: 1.04; margin: 26px 0 22px; }
 .hero h1 em { font-style: normal; color: var(--mint); }
 .hero-lede { max-width: 510px; font-size: clamp(1.02rem, 1.5vw, 1.17rem); line-height: 1.75; color: #c4d5cc; }
