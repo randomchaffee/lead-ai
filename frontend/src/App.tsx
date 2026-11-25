@@ -365,6 +365,7 @@ function App() {
             across methods.
           </figcaption>
         </figure>
+        <div className="plot-insight"><span>READING THE PLOT</span><p>DBSCAN’s black crosses are noise points: projects that did not fall within a dense group under the chosen settings. They are candidates for review, not confirmed problems.</p></div>
       </section>
 
       <section className="takeaway-section">
