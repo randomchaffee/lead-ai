@@ -14,13 +14,14 @@
 | 2026-11-13 | Evan Gregorio | evan/davies-bouldin | creating a function that returns the davies-bouldin index | Completed |
 | 2026-11-13 | Amiel De Castro | amiel/feat-kmeans-evaluation | K-Means evaluation with Silhouette Score, Davies-Bouldin Index, and Matplotlib cluster plots (`kmeans_evaluate.py`) | Completed |
 | 2026-11-13 | Amiel De Castro | amiel/feat-compare-all | Main comparison file running all 3 algorithms with Silhouette, Davies-Bouldin, and 3-panel plot comparison (`compare_all.py`) | Completed |
-| 2026-11-19 | Evan Gregorio | evan/frontend | create the frontend | Partially Completed |
 
 ## Frontend
 
 | Date | Member | Branch | Task | Status |
 | :--- | :--- | :--- | :--- | :--- |
 | 2026-10-29 | Amiel De Castro | main | Initial frontend project setup using Vite and React TypeScript | Completed |
+| 2026-11-19 | Evan Gregorio | evan/frontend | create the frontend | Partially Completed |
+| 2026-11-19 | Evan Gregorio | evan/frontend | create the frontend | Completed |
 
 ## Project Documentation
 
