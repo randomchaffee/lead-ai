@@ -194,6 +194,12 @@ td.numeric { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--
 .footer-brand .brand-accent { color: var(--mint); }
 .footer-copy p { margin: 0 0 5px; font-size: .68rem; line-height: 1.6; }
 .footer-copy p:last-child { color: #7d9586; max-width: 610px; margin-top: 10px; }
+.footer-references { margin-top: 18px; }
+.footer-references h2 { margin: 0 0 8px; color: #d3e2d8; font-size: .72rem; font-weight: 700; }
+.footer-references ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px 18px; margin: 0; padding: 0; list-style: none; }
+.footer-references a { color: #a9bcb0; font-size: .68rem; line-height: 1.5; text-decoration: none; }
+.footer-references a:hover { color: var(--mint); }
+.footer-references a span { padding-left: 3px; }
 .footer-link { color: #d3e2d8; font-size: .75rem; font-weight: 700; text-decoration: none; }
 .footer-link span { padding-left: 5px; }
 
@@ -252,6 +258,7 @@ td.numeric { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--
   .takeaway-inner { grid-template-columns: 1fr; gap: 24px; }
   .site-footer { grid-template-columns: 1fr auto; gap: 18px; padding: 30px 6%; }
   .footer-copy { grid-column: 1 / -1; grid-row: 2; }
+ .footer-references ul { grid-template-columns: 1fr; }
 }
 @media (max-width: 390px) {
   .site-nav { gap: 10px; }

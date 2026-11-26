@@ -384,6 +384,15 @@ function App() {
           <p>DPWH Infrastructure Transparency Dataset · BetterGov.ph</p>
           <p>Built by De Castro, Gregorio, Lanao, and Chua · CMSC 170</p>
           <p>Algorithms and metrics were implemented with Python and NumPy. Matplotlib was used for visualization. AI assistance disclosed.</p>
+          <div className="footer-references">
+            <h2>References</h2>
+            <ul>
+              <li><a href="https://www.geeksforgeeks.org/machine-learning/k-medoids-clustering-in-machine-learning/" target="_blank" rel="noreferrer">GeeksforGeeks: K-Medoids clustering <span aria-hidden="true">↗</span></a></li>
+              <li><a href="https://onlinelibrary.wiley.com/doi/10.1002/9780470316801.ch2" target="_blank" rel="noreferrer">Partitioning Around Medoids (PAM) <span aria-hidden="true">↗</span></a></li>
+              <li><a href="https://primo.ai/wiki/Density-Based_Spatial_Clustering_of_Applications_with_Noise_(DBSCAN)" target="_blank" rel="noreferrer">PRIMO.AI: DBSCAN <span aria-hidden="true">↗</span></a></li>
+              <li><a href="https://www.geeksforgeeks.org/machine-learning/dbscan-clustering-in-ml-density-based-clustering/" target="_blank" rel="noreferrer">GeeksforGeeks: DBSCAN clustering <span aria-hidden="true">↗</span></a></li>
+            </ul>
+          </div>
         </div>
         <a className="footer-link" href="https://github.com/randomchaffee/lead-ai" target="_blank" rel="noreferrer">Repository <span>↗</span></a>
       </footer>
